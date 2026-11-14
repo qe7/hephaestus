@@ -3,6 +3,8 @@ package com.github.qe7.hephaestus.modules;
 import com.github.qe7.hephaestus.events.EventHandler;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.lwjgl.input.Keyboard;
 
 @RequiredArgsConstructor
 @Getter
@@ -13,6 +15,12 @@ public abstract class AbstractModule implements EventHandler {
     protected String description;
 
     private boolean enabled;
+
+    @Setter
+    private int key = Keyboard.KEY_NONE;
+
+    @Setter
+    private KeyTrigger trigger = KeyTrigger.PRESS;
 
     protected void onEnable() {
     }

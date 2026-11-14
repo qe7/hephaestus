@@ -80,7 +80,7 @@ import net.minecraft.world.storage.ISaveFormat;
 import net.minecraft.world.storage.ISaveHandler;
 import com.github.qe7.hephaestus.core.Globals;
 import com.github.qe7.hephaestus.events.impl.game.TickEvent;
-import com.github.qe7.hephaestus.events.impl.input.KeyPressEvent;
+import com.github.qe7.hephaestus.events.impl.input.KeyEvent;
 import lombok.Getter;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Controllers;
@@ -941,6 +941,9 @@ public abstract class Minecraft implements Runnable {
         }
         if (currentScreen == null || currentScreen.field_948_f) {
             while (Mouse.next()) {
+                if (Mouse.getEventButton() != -1) {
+                    Globals.EVENT_MANAGER.publishEvent(new KeyEvent(Mouse.getEventButton() - 100, Mouse.getEventButtonState()));
+                }
                 long l = System.currentTimeMillis() - systemTime;
                 if (l <= 200L) {
                     int k = Mouse.getEventDWheel();
@@ -982,12 +985,11 @@ public abstract class Minecraft implements Runnable {
             }
             while (Keyboard.next()) {
                 thePlayer.handleKeyPress(Keyboard.getEventKey(), Keyboard.getEventKeyState());
+                Globals.EVENT_MANAGER.publishEvent(new KeyEvent(Keyboard.getEventKey(), Keyboard.getEventKeyState()));
                 if (Keyboard.getEventKeyState()) {
                     if (Keyboard.getEventKey() == 87) {
                         toggleFullscreen();
                     } else {
-                        Globals.EVENT_MANAGER.publishEvent(new KeyPressEvent(Keyboard.getEventKey()));
-
                         if (currentScreen != null) {
                             currentScreen.handleKeyboardInput();
                         } else {

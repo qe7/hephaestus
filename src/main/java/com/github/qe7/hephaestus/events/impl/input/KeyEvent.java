@@ -6,6 +6,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public final class KeyPressEvent implements Event {
+public final class KeyEvent implements Event {
     private final int keyCode;
+    private final boolean pressed;
 }
