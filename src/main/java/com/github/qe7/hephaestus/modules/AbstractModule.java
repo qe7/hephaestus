@@ -1,10 +1,14 @@
 package com.github.qe7.hephaestus.modules;
 
 import com.github.qe7.hephaestus.events.EventHandler;
+import com.github.qe7.hephaestus.settings.AbstractSetting;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.lwjgl.input.Keyboard;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Getter
@@ -21,6 +25,8 @@ public abstract class AbstractModule implements EventHandler {
 
     @Setter
     private KeyTrigger trigger = KeyTrigger.PRESS;
+
+    private final List<AbstractSetting<?>> settings = new ArrayList<>();
 
     protected void onEnable() {
     }

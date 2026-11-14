@@ -7,11 +7,13 @@ import com.github.qe7.hephaestus.events.Listener;
 import com.github.qe7.hephaestus.events.impl.game.TickEvent;
 import com.github.qe7.hephaestus.events.impl.input.KeyEvent;
 import com.github.qe7.hephaestus.modules.impl.render.HUDModule;
+import com.github.qe7.hephaestus.settings.AbstractSetting;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,6 +55,17 @@ public final class ModuleManager implements EventHandler {
     }
 
     private void registerModule(AbstractModule module) {
+        for (Field field : module.getClass().getDeclaredFields()) {
+            if (!AbstractSetting.class.isAssignableFrom(field.getType())) continue;
+
+            try {
+                field.setAccessible(true);
+                module.getSettings().add((AbstractSetting<?>) field.get(module));
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to register setting " + field.getName(), e);
+            }
+        }
+
         modules.put(module.getClass(), module);
         Globals.EVENT_MANAGER.registerHandler(module);
     }
