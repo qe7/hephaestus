@@ -7,6 +7,8 @@ import com.github.qe7.hephaestus.modules.KeyTrigger;
 import com.github.qe7.hephaestus.utils.ChatUtil;
 import org.lwjgl.input.Keyboard;
 
+import java.util.Locale;
+
 public final class BindCommand extends AbstractCommand {
 
     public BindCommand() {
@@ -31,12 +33,12 @@ public final class BindCommand extends AbstractCommand {
         if (key == Keyboard.KEY_NONE) {
             ChatUtil.addMessage(String.format("Unbound %s.", module.getName()));
         } else {
-            ChatUtil.addMessage(String.format("Bound %s to %s (%s).", module.getName(), keyName(key), trigger.name().toLowerCase()));
+            ChatUtil.addMessage(String.format("Bound %s to %s (%s).", module.getName(), keyName(key), trigger.name().toLowerCase(Locale.ROOT)));
         }
     }
 
     private static int parseKey(String name) {
-        final String upper = name.toUpperCase();
+        final String upper = name.toUpperCase(Locale.ROOT);
 
         if (upper.matches("MOUSE\\d")) return Integer.parseInt(upper.substring(5)) - 100;
 
