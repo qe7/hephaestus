@@ -4,6 +4,8 @@
 
 package net.minecraft.client.renderer;
 
+import com.github.qe7.hephaestus.core.Globals;
+import com.github.qe7.hephaestus.events.impl.render.FovEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.gui.ScaledResolution;
@@ -189,7 +191,7 @@ public class EntityRenderer
             float f2 = (float)entityliving.deathTime + f;
             f1 /= (1.0F - 500F / (f2 + 500F)) * 2.0F + 1.0F;
         }
-        return f1 + field_22221_y + (field_22222_x - field_22221_y) * f;
+        return Globals.EVENT_MANAGER.publishEvent(new FovEvent(f1 + field_22221_y + (field_22222_x - field_22221_y) * f)).getFov();
     }
 
     private void hurtCameraEffect(float f)

@@ -11,6 +11,7 @@ import com.github.qe7.hephaestus.modules.impl.misc.AutoRespawnModule;
 import com.github.qe7.hephaestus.modules.impl.misc.NoFallModule;
 import com.github.qe7.hephaestus.modules.impl.render.FullBrightModule;
 import com.github.qe7.hephaestus.modules.impl.render.HUDModule;
+import com.github.qe7.hephaestus.modules.impl.render.ZoomModule;
 import com.github.qe7.hephaestus.settings.AbstractSetting;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
@@ -32,6 +33,7 @@ public final class ModuleManager implements EventHandler {
         registerModule(new NoFallModule());
         registerModule(new AntiKnockbackModule());
         registerModule(new AutoRespawnModule());
+        registerModule(new ZoomModule());
 
         Globals.EVENT_MANAGER.registerHandler(this);
     }
