@@ -4,6 +4,9 @@
 
 package net.minecraft.network;
 
+import com.github.qe7.hephaestus.core.Globals;
+import com.github.qe7.hephaestus.events.impl.network.PacketEvent;
+
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -52,10 +55,9 @@ public class NetworkManager {
     }
 
     public void addToSendQueue(Packet packet) {
-//        final PacketEvent event = new PacketEvent(packet, PacketEvent.Type.OUTGOING);
-//        Hephaestus.getInstance().getServices().get(EventManager.class).publishEvent(event);
-//
-//        if (event.isCancelled()) return;
+        if (Globals.EVENT_MANAGER.publishEvent(new PacketEvent.Send(packet)).isCancelled()) {
+            return;
+        }
 
         if (isServerTerminating) {
             return;
@@ -113,11 +115,6 @@ public class NetworkManager {
         try {
             Packet packet = Packet.readPacket(socketInputStream, netHandler.isServerHandler());
             if (packet != null) {
-                //final PacketEvent event = new PacketEvent(packet, PacketEvent.Type.INCOMING);
-                //Hephaestus.getInstance().getServices().get(EventManager.class).publishEvent(event);
-
-                //if (event.isCancelled()) return false;
-
                 field_28145_d[packet.getPacketId()] += packet.getPacketSize() + 1;
                 readPackets.add(packet);
                 flag = true;
@@ -175,9 +172,11 @@ public class NetworkManager {
         } else {
             timeSinceLastRead = 0;
         }
-        Packet packet;
-        for (int i = 100; !readPackets.isEmpty() && i-- >= 0; packet.processPacket(netHandler)) {
-            packet = (Packet) readPackets.remove(0);
+        for (int i = 100; !readPackets.isEmpty() && i-- >= 0; ) {
+            Packet packet = (Packet) readPackets.remove(0);
+            if (!Globals.EVENT_MANAGER.publishEvent(new PacketEvent.Receive(packet)).isCancelled()) {
+                packet.processPacket(netHandler);
+            }
         }
 
         wakeThreads();
