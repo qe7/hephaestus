@@ -5,6 +5,7 @@ import com.github.qe7.hephaestus.core.Globals;
 import com.github.qe7.hephaestus.modules.AbstractModule;
 import com.github.qe7.hephaestus.modules.KeyTrigger;
 import com.github.qe7.hephaestus.utils.ChatUtil;
+import com.github.qe7.hephaestus.utils.KeyUtil;
 import org.lwjgl.input.Keyboard;
 
 import java.util.Locale;
@@ -24,8 +25,8 @@ public final class BindCommand extends AbstractCommand {
         final AbstractModule module = Globals.MODULE_MANAGER.getModule(args[0]);
         if (module == null) throw new IllegalArgumentException(String.format("Unknown module \"%s\".", args[0]));
 
-        final int key = parseKey(args[1]);
-        final KeyTrigger trigger = args.length == 3 ? parseTrigger(args[2]) : KeyTrigger.PRESS;
+        final int key = KeyUtil.parseKey(args[1]);
+        final KeyTrigger trigger = args.length == 3 ? KeyTrigger.parse(args[2]) : KeyTrigger.PRESS;
 
         module.setKey(key);
         module.setTrigger(trigger);
@@ -33,30 +34,7 @@ public final class BindCommand extends AbstractCommand {
         if (key == Keyboard.KEY_NONE) {
             ChatUtil.addMessage(String.format("Unbound %s.", module.getName()));
         } else {
-            ChatUtil.addMessage(String.format("Bound %s to %s (%s).", module.getName(), keyName(key), trigger.name().toLowerCase(Locale.ROOT)));
+            ChatUtil.addMessage(String.format("Bound %s to %s (%s).", module.getName(), KeyUtil.keyName(key), trigger.name().toLowerCase(Locale.ROOT)));
         }
-    }
-
-    private static int parseKey(String name) {
-        final String upper = name.toUpperCase(Locale.ROOT);
-
-        if (upper.matches("MOUSE\\d")) return Integer.parseInt(upper.substring(5)) - 100;
-
-        final int key = Keyboard.getKeyIndex(upper);
-        if (key == Keyboard.KEY_NONE && !upper.equals("NONE")) {
-            throw new IllegalArgumentException(String.format("Unknown key \"%s\".", name));
-        }
-        return key;
-    }
-
-    private static KeyTrigger parseTrigger(String name) {
-        for (KeyTrigger trigger : KeyTrigger.values()) {
-            if (trigger.name().equalsIgnoreCase(name)) return trigger;
-        }
-        throw new IllegalArgumentException(String.format("Unknown trigger \"%s\".", name));
-    }
-
-    private static String keyName(int key) {
-        return key < 0 ? "MOUSE" + (key + 100) : Keyboard.getKeyName(key);
     }
 }

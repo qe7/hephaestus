@@ -463,6 +463,7 @@ public abstract class Minecraft implements Runnable {
 
     public void shutdownMinecraftApplet() {
         try {
+            Globals.CONFIG_MANAGER.save();
             statFileWriter.func_27175_b();
             statFileWriter.syncStats();
             try {

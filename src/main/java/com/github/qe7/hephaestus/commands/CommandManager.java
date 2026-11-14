@@ -1,6 +1,7 @@
 package com.github.qe7.hephaestus.commands;
 
 import com.github.qe7.hephaestus.commands.impl.BindCommand;
+import com.github.qe7.hephaestus.commands.impl.ConfigCommand;
 import com.github.qe7.hephaestus.utils.ChatUtil;
 import lombok.Getter;
 
@@ -16,6 +17,7 @@ public final class CommandManager {
 
     public void init() {
         registerCommand(new BindCommand());
+        registerCommand(new ConfigCommand());
     }
 
     private void registerCommand(AbstractCommand command) {
