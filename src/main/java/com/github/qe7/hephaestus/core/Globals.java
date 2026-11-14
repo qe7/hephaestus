@@ -12,4 +12,8 @@ public class Globals {
     public static final EventManager EVENT_MANAGER = new EventManager();
     public static final ModuleManager MODULE_MANAGER = new ModuleManager();
     public static final CommandManager COMMAND_MANAGER = new CommandManager();
+
+    public static void init() {
+        MODULE_MANAGER.init();
+    }
 }

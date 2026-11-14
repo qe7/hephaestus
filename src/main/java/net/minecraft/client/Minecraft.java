@@ -299,6 +299,8 @@ public abstract class Minecraft implements Runnable {
         checkGLError("Post startup");
         ingameGUI = new GuiIngame(this);
 
+        Globals.init();
+
         if (serverName != null) {
             displayGuiScreen(new GuiConnecting(this, serverName, serverPort));
         } else {

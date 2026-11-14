@@ -12,15 +12,15 @@ import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public final class ModuleManager implements EventHandler {
     @Getter
-    private final HashMap<Class<? extends AbstractModule>, AbstractModule> modules = new HashMap<>();
+    private final LinkedHashMap<Class<? extends AbstractModule>, AbstractModule> modules = new LinkedHashMap<>();
 
-    public ModuleManager() {
+    public void init() {
         registerModule(new HUDModule());
 
         Globals.EVENT_MANAGER.registerHandler(this);
