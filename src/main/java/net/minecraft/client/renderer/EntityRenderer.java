@@ -6,6 +6,7 @@ package net.minecraft.client.renderer;
 
 import com.github.qe7.hephaestus.core.Globals;
 import com.github.qe7.hephaestus.events.impl.render.FovEvent;
+import com.github.qe7.hephaestus.events.impl.render.RenderWorldEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.gui.ScaledResolution;
@@ -654,6 +655,14 @@ public class EntityRenderer
             renderglobal.renderClouds(f);
             GL11.glDisable(2912 /*GL_FOG*/);
             setupFog(1, f);
+            GL11.glPushMatrix();
+            GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+            try {
+                Globals.EVENT_MANAGER.publishEvent(new RenderWorldEvent(f));
+            } finally {
+                GL11.glPopAttrib();
+                GL11.glPopMatrix();
+            }
             if(cameraZoom == 1.0D)
             {
                 GL11.glClear(256);
