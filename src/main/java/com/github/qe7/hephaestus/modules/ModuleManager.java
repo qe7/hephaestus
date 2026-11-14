@@ -9,8 +9,10 @@ import com.github.qe7.hephaestus.events.impl.input.KeyEvent;
 import com.github.qe7.hephaestus.modules.impl.combat.AntiKnockbackModule;
 import com.github.qe7.hephaestus.modules.impl.misc.AutoRespawnModule;
 import com.github.qe7.hephaestus.modules.impl.misc.NoFallModule;
+import com.github.qe7.hephaestus.modules.impl.render.ESPModule;
 import com.github.qe7.hephaestus.modules.impl.render.FullBrightModule;
 import com.github.qe7.hephaestus.modules.impl.render.HUDModule;
+import com.github.qe7.hephaestus.modules.impl.render.XrayModule;
 import com.github.qe7.hephaestus.modules.impl.render.ZoomModule;
 import com.github.qe7.hephaestus.settings.AbstractSetting;
 import lombok.Getter;
@@ -34,6 +36,8 @@ public final class ModuleManager implements EventHandler {
         registerModule(new AntiKnockbackModule());
         registerModule(new AutoRespawnModule());
         registerModule(new ZoomModule());
+        registerModule(new XrayModule());
+        registerModule(new ESPModule());
 
         Globals.EVENT_MANAGER.registerHandler(this);
     }
