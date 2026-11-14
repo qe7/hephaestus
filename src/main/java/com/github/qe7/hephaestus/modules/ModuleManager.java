@@ -6,6 +6,8 @@ import com.github.qe7.hephaestus.events.EventSubscriber;
 import com.github.qe7.hephaestus.events.Listener;
 import com.github.qe7.hephaestus.events.impl.game.TickEvent;
 import com.github.qe7.hephaestus.events.impl.input.KeyEvent;
+import com.github.qe7.hephaestus.modules.impl.misc.NoFallModule;
+import com.github.qe7.hephaestus.modules.impl.render.FullBrightModule;
 import com.github.qe7.hephaestus.modules.impl.render.HUDModule;
 import com.github.qe7.hephaestus.settings.AbstractSetting;
 import lombok.Getter;
@@ -24,6 +26,8 @@ public final class ModuleManager implements EventHandler {
 
     public void init() {
         registerModule(new HUDModule());
+        registerModule(new FullBrightModule());
+        registerModule(new NoFallModule());
 
         Globals.EVENT_MANAGER.registerHandler(this);
     }
