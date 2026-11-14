@@ -70,11 +70,16 @@ public class RenderBlocks
         overrideBlockTexture = -1;
     }
 
-    public void func_31075_a(Block block, int i, int j, int k)
+    public boolean renderBlockAllFaces(Block block, int i, int j, int k)
     {
         renderAllFaces = true;
-        renderBlockByRenderType(block, i, j, k);
-        renderAllFaces = false;
+        try
+        {
+            return renderBlockByRenderType(block, i, j, k);
+        } finally
+        {
+            renderAllFaces = false;
+        }
     }
 
     public boolean renderBlockByRenderType(Block block, int i, int j, int k)

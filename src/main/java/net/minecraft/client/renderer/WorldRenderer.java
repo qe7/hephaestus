@@ -4,6 +4,8 @@
 
 package net.minecraft.client.renderer;
 
+import com.github.qe7.hephaestus.core.Globals;
+import com.github.qe7.hephaestus.events.impl.render.RenderBlockEvent;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -156,7 +158,11 @@ public class WorldRenderer
                         }
                         if(j3 == i2)
                         {
-                            flag1 |= renderblocks.renderBlockByRenderType(block, l2, j2, k2);
+                            RenderBlockEvent renderBlockEvent = Globals.EVENT_MANAGER.publishEvent(new RenderBlockEvent(block, l2, j2, k2));
+                            if(!renderBlockEvent.isCancelled())
+                            {
+                                flag1 |= renderBlockEvent.isRenderAllFaces() ? renderblocks.renderBlockAllFaces(block, l2, j2, k2) : renderblocks.renderBlockByRenderType(block, l2, j2, k2);
+                            }
                         }
                     }
 
