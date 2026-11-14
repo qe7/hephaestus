@@ -7,6 +7,7 @@ import com.github.qe7.hephaestus.events.Listener;
 import com.github.qe7.hephaestus.events.impl.game.TickEvent;
 import com.github.qe7.hephaestus.events.impl.input.KeyEvent;
 import com.github.qe7.hephaestus.modules.impl.combat.AntiKnockbackModule;
+import com.github.qe7.hephaestus.modules.impl.combat.KillAuraModule;
 import com.github.qe7.hephaestus.modules.impl.misc.AutoRespawnModule;
 import com.github.qe7.hephaestus.modules.impl.misc.NoFallModule;
 import com.github.qe7.hephaestus.modules.impl.render.ESPModule;
@@ -38,6 +39,7 @@ public final class ModuleManager implements EventHandler {
         registerModule(new ZoomModule());
         registerModule(new XrayModule());
         registerModule(new ESPModule());
+        registerModule(new KillAuraModule());
 
         Globals.EVENT_MANAGER.registerHandler(this);
     }
