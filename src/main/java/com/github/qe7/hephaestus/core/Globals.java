@@ -15,5 +15,6 @@ public class Globals {
 
     public static void init() {
         MODULE_MANAGER.init();
+        COMMAND_MANAGER.init();
     }
 }

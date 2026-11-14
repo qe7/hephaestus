@@ -61,6 +61,10 @@ public final class ModuleManager implements EventHandler {
         return moduleClass.cast(modules.get(moduleClass));
     }
 
+    public AbstractModule getModule(String name) {
+        return modules.values().stream().filter(module -> module.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+    }
+
     public List<AbstractModule> getEnabledModules() {
         return modules.values().stream().filter(AbstractModule::isEnabled).collect(Collectors.toList());
     }
