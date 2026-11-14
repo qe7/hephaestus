@@ -4,6 +4,8 @@
 
 package net.minecraft.client.entity;
 
+import com.github.qe7.hephaestus.core.Globals;
+import com.github.qe7.hephaestus.events.impl.game.MotionEvent;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiCrafting;
 import net.minecraft.client.gui.inventory.GuiDispenser;
@@ -65,6 +67,36 @@ public class EntityPlayerSP extends EntityPlayer
         moveStrafing = movementInput.moveStrafe;
         moveForward = movementInput.moveForward;
         isJumping = movementInput.jump;
+    }
+
+    @Override
+    public void onUpdate()
+    {
+        super.onUpdate();
+
+        final float realYaw = rotationYaw;
+        final float realPitch = rotationPitch;
+        final boolean realOnGround = onGround;
+
+        final MotionEvent.Pre pre = Globals.EVENT_MANAGER.publishEvent(new MotionEvent.Pre(rotationYaw, rotationPitch, onGround));
+        rotationYaw = pre.getYaw();
+        rotationPitch = pre.getPitch();
+        onGround = pre.isOnGround();
+        try
+        {
+            sendMotionUpdates();
+        } finally
+        {
+            rotationYaw = realYaw;
+            rotationPitch = realPitch;
+            onGround = realOnGround;
+        }
+
+        Globals.EVENT_MANAGER.publishEvent(new MotionEvent.Post());
+    }
+
+    protected void sendMotionUpdates()
+    {
     }
 
     public void onLivingUpdate()
