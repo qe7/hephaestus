@@ -28,6 +28,10 @@ public abstract class AbstractModule implements EventHandler {
 
     private final List<AbstractSetting<?>> settings = new ArrayList<>();
 
+    public AbstractSetting<?> getSetting(String name) {
+        return settings.stream().filter(setting -> setting.getName().replace(" ", "").equalsIgnoreCase(name)).findFirst().orElse(null);
+    }
+
     protected void onEnable() {
     }
 

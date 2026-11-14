@@ -2,6 +2,9 @@ package com.github.qe7.hephaestus.commands;
 
 import com.github.qe7.hephaestus.commands.impl.BindCommand;
 import com.github.qe7.hephaestus.commands.impl.ConfigCommand;
+import com.github.qe7.hephaestus.commands.impl.HelpCommand;
+import com.github.qe7.hephaestus.commands.impl.SetCommand;
+import com.github.qe7.hephaestus.commands.impl.ToggleCommand;
 import com.github.qe7.hephaestus.utils.ChatUtil;
 import lombok.Getter;
 
@@ -16,7 +19,10 @@ public final class CommandManager {
     private final LinkedHashMap<String, AbstractCommand> commands = new LinkedHashMap<>();
 
     public void init() {
+        registerCommand(new HelpCommand());
+        registerCommand(new ToggleCommand());
         registerCommand(new BindCommand());
+        registerCommand(new SetCommand());
         registerCommand(new ConfigCommand());
     }
 
