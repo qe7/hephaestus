@@ -17,6 +17,11 @@ public final class ModeSetting<E extends Enum<E>> extends AbstractSetting<E> {
     }
 
     @Override
+    public String format() {
+        return value.name().toLowerCase(Locale.ROOT);
+    }
+
+    @Override
     protected E convert(String input) {
         for (E mode : getModes()) {
             if (mode.name().equalsIgnoreCase(input)) return mode;

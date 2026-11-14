@@ -49,20 +49,16 @@ public final class SetCommand extends AbstractCommand {
     }
 
     private static String describe(AbstractSetting<?> setting) {
-        final StringBuilder text = new StringBuilder(setting.getName()).append(": ").append(format(setting.getValue()));
+        final StringBuilder text = new StringBuilder(setting.getName()).append(": ").append(setting.format());
 
         if (setting instanceof NumberSetting) {
             final NumberSetting<?> number = (NumberSetting<?>) setting;
             text.append(String.format(" (%s - %s)", number.getMin(), number.getMax()));
         }
         if (setting instanceof ModeSetting) {
-            final String modes = Arrays.stream(((ModeSetting<?>) setting).getModes()).map(SetCommand::format).collect(Collectors.joining(", "));
+            final String modes = Arrays.stream(((ModeSetting<?>) setting).getModes()).map(mode -> mode.name().toLowerCase(Locale.ROOT)).collect(Collectors.joining(", "));
             text.append(String.format(" [%s]", modes));
         }
         return text.toString();
-    }
-
-    private static String format(Object value) {
-        return value instanceof Enum ? ((Enum<?>) value).name().toLowerCase(Locale.ROOT) : String.valueOf(value);
     }
 }

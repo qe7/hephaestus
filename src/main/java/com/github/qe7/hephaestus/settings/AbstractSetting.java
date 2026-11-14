@@ -23,5 +23,9 @@ public abstract class AbstractSetting<T> {
         setValue(convert(input.trim()));
     }
 
+    public String format() {
+        return String.valueOf(value);
+    }
+
     protected abstract T convert(String input);
 }

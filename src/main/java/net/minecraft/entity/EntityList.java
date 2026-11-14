@@ -140,6 +140,11 @@ public class EntityList
         return ((Integer)classToIDMapping.get(entity.getClass())).intValue();
     }
 
+    public static Map getClassToStringMapping()
+    {
+        return classToStringMapping;
+    }
+
     public static String getEntityString(Entity entity)
     {
         return (String)classToStringMapping.get(entity.getClass());

@@ -105,7 +105,7 @@ public final class ConfigManager {
         final JsonObject settings = new JsonObject();
         for (AbstractSetting<?> setting : module.getSettings()) {
             final Object value = setting.getValue();
-            settings.add(setting.getName(), value instanceof Enum ? new JsonPrimitive(((Enum<?>) value).name()) : GSON.toJsonTree(value));
+            settings.add(setting.getName(), value instanceof Number || value instanceof Boolean ? GSON.toJsonTree(value) : new JsonPrimitive(setting.format()));
         }
 
         final JsonObject json = new JsonObject();
