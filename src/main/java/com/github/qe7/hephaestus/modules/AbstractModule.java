@@ -7,8 +7,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public abstract class AbstractModule implements EventHandler {
-    private final String name, description;
-    private final ModuleCategory category;
+    protected final String name;
+    protected final ModuleCategory category;
+
+    protected String description;
 
     private boolean enabled;
 
