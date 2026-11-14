@@ -7,7 +7,7 @@ import com.github.qe7.hephaestus.events.impl.render.RenderOverlayEvent;
 import com.github.qe7.hephaestus.modules.AbstractModule;
 import com.github.qe7.hephaestus.modules.ModuleCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.FontRenderer;
+import net.minecraft.client.gui.FontRenderer;
 
 import java.awt.*;
 

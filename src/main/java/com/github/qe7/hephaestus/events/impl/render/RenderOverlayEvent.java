@@ -3,7 +3,7 @@ package com.github.qe7.hephaestus.events.impl.render;
 import com.github.qe7.hephaestus.events.Event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import net.minecraft.src.ScaledResolution;
+import net.minecraft.client.gui.ScaledResolution;
 
 @AllArgsConstructor
 @Getter

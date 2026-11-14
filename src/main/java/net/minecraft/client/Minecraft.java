@@ -1,9 +1,86 @@
 package net.minecraft.client;
 
+import net.minecraft.block.Block;
+import net.minecraft.client.audio.SoundManager;
+import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiConflictWarning;
+import net.minecraft.client.gui.GuiErrorScreen;
+import net.minecraft.client.gui.GuiGameOver;
+import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.gui.GuiIngameMenu;
+import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiSleepMP;
+import net.minecraft.client.gui.GuiUnused;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.achievement.GuiAchievement;
+import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.multiplayer.GuiConnecting;
+import net.minecraft.client.multiplayer.PlayerController;
+import net.minecraft.client.multiplayer.PlayerControllerTest;
+import net.minecraft.client.network.NetClientHandler;
+import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.OpenGlCapsChecker;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.RenderEngine;
+import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texturefx.TextureCompassFX;
+import net.minecraft.client.renderer.texturefx.TextureFlamesFX;
+import net.minecraft.client.renderer.texturefx.TextureLavaFX;
+import net.minecraft.client.renderer.texturefx.TextureLavaFlowFX;
+import net.minecraft.client.renderer.texturefx.TexturePortalFX;
+import net.minecraft.client.renderer.texturefx.TextureWatchFX;
+import net.minecraft.client.renderer.texturefx.TextureWaterFX;
+import net.minecraft.client.renderer.texturefx.TextureWaterFlowFX;
+import net.minecraft.client.settings.EnumOptions;
+import net.minecraft.client.settings.GameSettings;
+import net.minecraft.client.texturepacks.TexturePackList;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.stats.AchievementList;
+import net.minecraft.stats.StatFileWriter;
+import net.minecraft.stats.StatList;
+import net.minecraft.stats.StatStringFormatKeyInv;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.EnumMovingObjectType;
+import net.minecraft.util.EnumOS2;
+import net.minecraft.util.EnumOSMappingHelper;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MinecraftError;
+import net.minecraft.util.MouseHelper;
+import net.minecraft.util.MovementInputFromOptions;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ScreenShotHelper;
+import net.minecraft.util.Session;
+import net.minecraft.util.Timer;
+import net.minecraft.util.Vec3D;
+import net.minecraft.world.ColorizerFoliage;
+import net.minecraft.world.ColorizerGrass;
+import net.minecraft.world.ColorizerWater;
+import net.minecraft.world.MinecraftException;
+import net.minecraft.world.Teleporter;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
+import net.minecraft.world.chunk.ChunkProviderLoadOrGenerate;
+import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.chunk.storage.SaveConverterMcRegion;
+import net.minecraft.world.storage.ISaveFormat;
+import net.minecraft.world.storage.ISaveHandler;
 import com.github.qe7.hephaestus.core.Globals;
 import com.github.qe7.hephaestus.events.impl.input.KeyPressEvent;
 import lombok.Getter;
-import net.minecraft.src.*;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Controllers;
 import org.lwjgl.input.Keyboard;
@@ -51,7 +128,7 @@ public abstract class Minecraft implements Runnable {
     public ModelBiped field_9242_w;
     public MovingObjectPosition objectMouseOver;
     public GameSettings gameSettings;
-    protected MinecraftApplet mcApplet;
+    public MinecraftApplet mcApplet;
     public SoundManager sndManager;
     public MouseHelper mouseHelper;
     public TexturePackList texturePackList;
@@ -69,12 +146,12 @@ public abstract class Minecraft implements Runnable {
     private static File minecraftDir = null;
     public volatile boolean running;
     public String debug;
-    boolean isTakingScreenshot;
-    long prevFrameTime;
+    public boolean isTakingScreenshot;
+    public long prevFrameTime;
     public boolean inGameHasFocus;
     private int mouseTicksRan;
     public boolean isRaining;
-    long systemTime;
+    public long systemTime;
     private int joinPlayerCounter;
 
     public Minecraft(Component component, Canvas canvas, int i, int j, boolean flag) {
@@ -823,7 +900,7 @@ public abstract class Minecraft implements Runnable {
         ingameGUI.updateTick();
         entityRenderer.getMouseOver(1.0F);
         if (thePlayer != null) {
-            net.minecraft.src.IChunkProvider ichunkprovider = theWorld.getIChunkProvider();
+            net.minecraft.world.chunk.IChunkProvider ichunkprovider = theWorld.getIChunkProvider();
             if (ichunkprovider instanceof ChunkProviderLoadOrGenerate) {
                 ChunkProviderLoadOrGenerate chunkproviderloadorgenerate = (ChunkProviderLoadOrGenerate) ichunkprovider;
                 int j = MathHelper.floor_float((int) thePlayer.posX) >> 4;
@@ -1017,7 +1094,7 @@ public abstract class Minecraft implements Runnable {
         if (saveLoader.isOldMapFormat(s)) {
             convertMapFormat(s, s1);
         } else {
-            net.minecraft.src.ISaveHandler isavehandler = saveLoader.getSaveLoader(s, false);
+            net.minecraft.world.storage.ISaveHandler isavehandler = saveLoader.getSaveLoader(s, false);
             World world = null;
             world = new World(isavehandler, s1, l);
             if (world.isNewWorld) {
@@ -1096,7 +1173,7 @@ public abstract class Minecraft implements Runnable {
             playerController.func_717_a(world);
             if (!isMultiplayerWorld()) {
                 if (entityplayer == null) {
-                    thePlayer = (EntityPlayerSP) world.func_4085_a(net.minecraft.src.EntityPlayerSP.class);
+                    thePlayer = (EntityPlayerSP) world.func_4085_a(net.minecraft.client.entity.EntityPlayerSP.class);
                 }
             } else if (thePlayer != null) {
                 thePlayer.preparePlayerToSpawn();
@@ -1121,7 +1198,7 @@ public abstract class Minecraft implements Runnable {
             if (entityplayer != null) {
                 world.emptyMethod1();
             }
-            net.minecraft.src.IChunkProvider ichunkprovider = world.getIChunkProvider();
+            net.minecraft.world.chunk.IChunkProvider ichunkprovider = world.getIChunkProvider();
             if (ichunkprovider instanceof ChunkProviderLoadOrGenerate) {
                 ChunkProviderLoadOrGenerate chunkproviderloadorgenerate = (ChunkProviderLoadOrGenerate) ichunkprovider;
                 int i = MathHelper.floor_float((int) thePlayer.posX) >> 4;
@@ -1154,7 +1231,7 @@ public abstract class Minecraft implements Runnable {
         int i = 0;
         int j = (c * 2) / 16 + 1;
         j *= j;
-        net.minecraft.src.IChunkProvider ichunkprovider = theWorld.getIChunkProvider();
+        net.minecraft.world.chunk.IChunkProvider ichunkprovider = theWorld.getIChunkProvider();
         ChunkCoordinates chunkcoordinates = theWorld.getSpawnPoint();
         if (thePlayer != null) {
             chunkcoordinates.x = (int) thePlayer.posX;
@@ -1233,7 +1310,7 @@ public abstract class Minecraft implements Runnable {
             chunkcoordinates1 = theWorld.getSpawnPoint();
             flag1 = false;
         }
-        net.minecraft.src.IChunkProvider ichunkprovider = theWorld.getIChunkProvider();
+        net.minecraft.world.chunk.IChunkProvider ichunkprovider = theWorld.getIChunkProvider();
         if (ichunkprovider instanceof ChunkProviderLoadOrGenerate) {
             ChunkProviderLoadOrGenerate chunkproviderloadorgenerate = (ChunkProviderLoadOrGenerate) ichunkprovider;
             chunkproviderloadorgenerate.setCurrentChunkOver(chunkcoordinates1.x >> 4, chunkcoordinates1.z >> 4);
