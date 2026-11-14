@@ -10,6 +10,7 @@ import com.github.qe7.hephaestus.modules.impl.combat.AntiKnockbackModule;
 import com.github.qe7.hephaestus.modules.impl.combat.KillAuraModule;
 import com.github.qe7.hephaestus.modules.impl.misc.AutoRespawnModule;
 import com.github.qe7.hephaestus.modules.impl.misc.NoFallModule;
+import com.github.qe7.hephaestus.modules.impl.movement.FlightModule;
 import com.github.qe7.hephaestus.modules.impl.render.ESPModule;
 import com.github.qe7.hephaestus.modules.impl.render.FullBrightModule;
 import com.github.qe7.hephaestus.modules.impl.render.HUDModule;
@@ -40,6 +41,7 @@ public final class ModuleManager implements EventHandler {
         registerModule(new XrayModule());
         registerModule(new ESPModule());
         registerModule(new KillAuraModule());
+        registerModule(new FlightModule());
 
         Globals.EVENT_MANAGER.registerHandler(this);
     }
