@@ -79,6 +79,7 @@ import net.minecraft.world.chunk.storage.SaveConverterMcRegion;
 import net.minecraft.world.storage.ISaveFormat;
 import net.minecraft.world.storage.ISaveHandler;
 import com.github.qe7.hephaestus.core.Globals;
+import com.github.qe7.hephaestus.events.impl.game.TickEvent;
 import com.github.qe7.hephaestus.events.impl.input.KeyPressEvent;
 import lombok.Getter;
 import org.lwjgl.LWJGLException;
@@ -893,6 +894,9 @@ public abstract class Minecraft implements Runnable {
     }
 
     public void runTick() {
+        if (thePlayer != null) {
+            Globals.EVENT_MANAGER.publishEvent(new TickEvent());
+        }
         if (ticksRan == 6000) {
             func_28001_B();
         }
